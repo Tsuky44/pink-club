@@ -15,8 +15,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "The Pink Club | Garage Souterrain de Drift & Tuning",
-  description: "Performances Souterraines - Conduite Nocturne Tokyo. Le parking souterrain d'élite pour drift et voitures custom dans GTA RP.",
+  title: "THE PINK CLUB | L'Élite du Drift",
+  description: "L'événement exclusif Élite Auto. Drift, tuning et culture automobile nocturne dans notre parking souterrain d'élite.",
 };
 
 export default function RootLayout({

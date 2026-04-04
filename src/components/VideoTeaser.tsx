@@ -1,13 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Users } from "lucide-react";
+import { Users, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
 import TeaserVideo from "./TeaserVideo";
+import { GTAMapModal } from "./GTAMapModal";
 
 export default function VideoTeaser() {
   const [rsvpCount, setRsvpCount] = useState(47);
   const [hasClicked, setHasClicked] = useState(false);
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
   // Check localStorage on mount
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function VideoTeaser() {
                   DATE
                 </span>
                 <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter">
-                  OCT 24. 2024
+                  17 AVR. 2026
                 </span>
               </div>
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
@@ -76,16 +78,20 @@ export default function VideoTeaser() {
                   OUVERTURE
                 </span>
                 <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter">
-                  22:00 JST
+                  21:00
                 </span>
               </div>
               <div className="flex justify-between items-center border-b border-white/5 pb-2">
                 <span className="text-on-surface/50 text-[10px] uppercase font-bold tracking-widest">
                   LIEU
                 </span>
-                <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter">
-                  SECTOR B-7
-                </span>
+                <button 
+                  onClick={() => setIsMapOpen(true)}
+                  className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter hover:text-primary transition-colors flex items-center gap-2 group"
+                >
+                  <MapPin size={14} className="text-primary group-hover:animate-bounce" />
+                  PARKING DU PINK CLUB WARDOG
+                </button>
               </div>
             </div>
 
@@ -119,6 +125,7 @@ export default function VideoTeaser() {
           </div>
         </motion.div>
       </div>
+      <GTAMapModal isOpen={isMapOpen} onClose={() => setIsMapOpen(false)} />
     </section>
   );
 }

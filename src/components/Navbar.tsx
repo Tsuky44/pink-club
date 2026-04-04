@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Tilt_Neon } from "next/font/google";
 
 const tiltNeon = Tilt_Neon({
@@ -11,13 +12,20 @@ const tiltNeon = Tilt_Neon({
 });
 
 const navLinks = [
-  { name: "CONCEPT", href: "#concept" },
-  { name: "GARAGE", href: "#garage" },
-  { name: "PLANNING", href: "#timetable" },
-  { name: "PILOTES", href: "#drivers" },
+  { name: "HOME", href: "/" },
+  { name: "WALL OF FAME", href: "/wall-of-fame" },
+  { name: "LOCATION DRIFT", href: "#garage" },
+  { name: "CONTACT", href: "#concept" },
 ];
 
 export default function Navbar() {
+  const pathname = usePathname();
+
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname.startsWith(href);
+  };
+
   return (
     <motion.nav
       initial={{ y: -100, opacity: 0 }}
@@ -49,12 +57,12 @@ export default function Navbar() {
       </Link>
 
       <div className="hidden md:flex gap-8 lg:gap-12 items-center">
-        {navLinks.map((link, index) => (
+        {navLinks.map((link) => (
           <Link
             key={link.name}
             href={link.href}
             className={`font-[family-name:var(--font-space-grotesk)] uppercase tracking-tighter font-bold text-sm transition-all hover:text-secondary hover:drop-shadow-[0_0_5px_#00eefc] ${
-              index === 0 ? "text-primary border-b-2 border-primary pb-1" : "text-white/70"
+              isActive(link.href) ? "text-primary border-b-2 border-primary pb-1" : "text-white/70"
             }`}
           >
             {link.name}

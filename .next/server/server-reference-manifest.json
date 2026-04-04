@@ -1,5 +1,54 @@
 {
-  "node": {},
+  "node": {
+    "005922dad24b67946ca9a6131507b19e95560d415a": {
+      "workers": {
+        "app/wall-of-fame/page": {
+          "moduleId": 51346,
+          "async": false,
+          "exportedName": "getTopContenders",
+          "filename": "pink-club/src/actions/galleryActions.ts"
+        }
+      },
+      "filename": "pink-club/src/actions/galleryActions.ts",
+      "exportedName": "getTopContenders"
+    },
+    "408414e9290ea504fa2f27a3931b57b697616a4501": {
+      "workers": {
+        "app/wall-of-fame/page": {
+          "moduleId": 51346,
+          "async": false,
+          "exportedName": "uploadPhoto",
+          "filename": "pink-club/src/actions/galleryActions.ts"
+        }
+      },
+      "filename": "pink-club/src/actions/galleryActions.ts",
+      "exportedName": "uploadPhoto"
+    },
+    "40c3af8f07b981ec08e494692c6864b4dbba66e03e": {
+      "workers": {
+        "app/wall-of-fame/page": {
+          "moduleId": 51346,
+          "async": false,
+          "exportedName": "addKudo",
+          "filename": "pink-club/src/actions/galleryActions.ts"
+        }
+      },
+      "filename": "pink-club/src/actions/galleryActions.ts",
+      "exportedName": "addKudo"
+    },
+    "60cd7ff1944a1f2da388815ab817e3102dcd7cde00": {
+      "workers": {
+        "app/wall-of-fame/page": {
+          "moduleId": 51346,
+          "async": false,
+          "exportedName": "getPhotos",
+          "filename": "pink-club/src/actions/galleryActions.ts"
+        }
+      },
+      "filename": "pink-club/src/actions/galleryActions.ts",
+      "exportedName": "getPhotos"
+    }
+  },
   "edge": {},
   "encryptionKey": "LFfO1PVrm9ExwVNdmMYhG/R5GidoFUxty/XUZGFBdrk="
 }

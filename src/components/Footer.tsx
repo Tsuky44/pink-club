@@ -22,9 +22,9 @@ export default function Footer() {
         {/* Logo and partner */}
         <div className="flex flex-col gap-4 text-center md:text-left">
           <div className="text-base md:text-lg font-bold text-outline font-[family-name:var(--font-manrope)] uppercase tracking-widest">
-            <span className="text-white font-black italic tracking-tighter mr-2">
-              THE PINK CLUB
-            </span>
+            <p className="text-on-surface-variant text-xs tracking-widest uppercase">
+              THE PINK CLUB 2026 • LOS SANTOS
+            </p>
             <span className="text-outline font-normal text-xs opacity-50 hidden sm:inline">
               PERFORMANCES SOUTERRAINES.
             </span>
@@ -72,7 +72,7 @@ export default function Footer() {
           transition={{ duration: 0.6 }}
           className="mt-8 md:mt-0 text-[10px] tracking-[0.2em] text-outline font-[family-name:var(--font-manrope)] uppercase text-center md:text-right"
         >
-          © 2024 THE PINK CLUB. TOUS DROITS RÉSERVÉS.
+          OCT 24. 2026 THE PINK CLUB. TOUS DROITS RÉSERVÉS.
         </motion.div>
       </div>
     </footer>

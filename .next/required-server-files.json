@@ -63,7 +63,12 @@
           "search": ""
         }
       ],
-      "remotePatterns": [],
+      "remotePatterns": [
+        {
+          "protocol": "https",
+          "hostname": "images.unsplash.com"
+        }
+      ],
       "qualities": [
         75
       ],
@@ -104,7 +109,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\Mathis\\Documents\\Project\\pink club\\pink-club",
+    "outputFileTracingRoot": "C:\\Users\\Mathis\\Documents\\Project\\pink club",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -220,6 +225,9 @@
       "turbopackFileSystemCacheForBuild": false,
       "turbopackInferModuleSideEffects": true,
       "turbopackPluginRuntimeStrategy": "childProcesses",
+      "serverActions": {
+        "bodySizeLimit": "10mb"
+      },
       "optimizePackageImports": [
         "lucide-react",
         "date-fns",
@@ -304,12 +312,12 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "C:\\Users\\Mathis\\Documents\\Project\\pink club\\pink-club"
+      "root": "C:\\Users\\Mathis\\Documents\\Project\\pink club"
     },
     "distDirRoot": ".next"
   },
   "appDir": "C:\\Users\\Mathis\\Documents\\Project\\pink club\\pink-club",
-  "relativeAppDir": "",
+  "relativeAppDir": "pink-club",
   "files": [
     ".next\\routes-manifest.json",
     ".next\\server\\pages-manifest.json",

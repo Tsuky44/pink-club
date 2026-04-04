@@ -46,6 +46,12 @@
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/wall-of-fame",
+      "regex": "^/wall\\-of\\-fame(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/wall\\-of\\-fame(?:/)?$"
     }
   ],
   "dataRoutes": [],
