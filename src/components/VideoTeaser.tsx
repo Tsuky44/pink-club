@@ -1,0 +1,124 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import TeaserVideo from "./TeaserVideo";
+
+export default function VideoTeaser() {
+  const [rsvpCount, setRsvpCount] = useState(47);
+  const [hasClicked, setHasClicked] = useState(false);
+
+  // Check localStorage on mount
+  useEffect(() => {
+    const clicked = localStorage.getItem("pinkClubRsvp");
+    if (clicked === "true") {
+      setHasClicked(true);
+    }
+  }, []);
+
+  // Commande secrète pour reset : Ctrl + Shift + 0 (zéro)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && e.key === "0") {
+        setRsvpCount(0);
+        localStorage.removeItem("pinkClubRsvp");
+        setHasClicked(false);
+        console.log("🔥 Compteur reset !");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+  return (
+    <section id="garage" className="py-16 md:py-24 px-4 md:px-10 bg-surface-container-low">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
+        {/* Video */}
+        <div className="lg:col-span-8">
+          <TeaserVideo 
+            src="/teaser.mp4" 
+            poster="/parking.png"
+            className="aspect-video w-full"
+          />
+        </div>
+
+        {/* Event card */}
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="lg:col-span-4"
+        >
+          <div className="bg-surface-variant p-6 md:p-10 border-l-4 border-primary neon-box-glow">
+            <span className="text-[10px] tracking-[0.5em] text-primary font-[family-name:var(--font-space-grotesk)] font-black uppercase">
+              Prochain Événement
+            </span>
+            <h3 className="text-3xl md:text-4xl font-[family-name:var(--font-space-grotesk)] font-black italic uppercase tracking-tighter mt-4 mb-2">
+              GRANDE OUVERTURE
+            </h3>
+            <p className="text-on-surface-variant font-[family-name:var(--font-manrope)] text-xs uppercase tracking-widest mb-6 md:mb-8">
+              Phase 1 : Collectif Drift Underground
+            </p>
+
+            {/* Event details */}
+            <div className="space-y-4 md:space-y-6">
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                <span className="text-on-surface/50 text-[10px] uppercase font-bold tracking-widest">
+                  DATE
+                </span>
+                <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter">
+                  OCT 24. 2024
+                </span>
+              </div>
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                <span className="text-on-surface/50 text-[10px] uppercase font-bold tracking-widest">
+                  OUVERTURE
+                </span>
+                <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter">
+                  22:00 JST
+                </span>
+              </div>
+              <div className="flex justify-between items-center border-b border-white/5 pb-2">
+                <span className="text-on-surface/50 text-[10px] uppercase font-bold tracking-widest">
+                  LIEU
+                </span>
+                <span className="font-[family-name:var(--font-space-grotesk)] font-bold text-white tracking-tighter">
+                  SECTOR B-7
+                </span>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="mt-8 md:mt-10 flex items-center gap-4">
+              {hasClicked ? (
+                <div className="flex-1 py-4 bg-surface-container border border-primary/30 font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-sm text-primary text-center">
+                  TU ES INSCRIT
+                </div>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setRsvpCount(c => c + 1);
+                    localStorage.setItem("pinkClubRsvp", "true");
+                    setHasClicked(true);
+                  }}
+                  className="flex-1 py-4 bg-primary font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-sm text-white hover:shadow-[0_0_30px_rgba(255,0,127,0.5)] transition-all flex items-center justify-center gap-2"
+                >
+                  <span>PRÉSENT</span>
+                </motion.button>
+              )}
+              <div className="flex flex-col items-center justify-center px-4 py-3 bg-surface-container border border-primary/30 min-w-[70px]">
+                <Users size={18} className="text-primary mb-1" />
+                <span className="font-[family-name:var(--font-space-grotesk)] font-black text-2xl text-white leading-none">
+                  {rsvpCount}
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
