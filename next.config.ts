@@ -13,9 +13,6 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
-    turbo: {
-      root: __dirname,
-    },
   },
 };
 

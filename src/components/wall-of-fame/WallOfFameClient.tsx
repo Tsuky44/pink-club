@@ -113,7 +113,7 @@ export function WallOfFameClient({ initialPhotos }: WallOfFameClientProps) {
               <span className="text-primary drop-shadow-[0_0_10px_rgba(255,0,127,0.8)]">INSCRIS TON NOM DANS L'HISTOIRE.</span>
             </h2>
             <p className="text-on-surface-variant max-w-xl mx-auto text-sm md:text-base tracking-wider">
-              Télécharge ta capture d&apos;écran, obtiens un lien de suppression sécurisé, et laisse la communauté décider si tu mérites une place au Wall of Fame.
+              Télécharge ta photo et laisse la communauté décider si tu mérites une place au Wall of Fame.
             </p>
           </div>
           <UploadButton />

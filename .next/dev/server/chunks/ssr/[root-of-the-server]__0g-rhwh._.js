@@ -73,7 +73,31 @@ var __TURBOPACK__imported__module__$5b$next$5d2f$internal$2f$font$2f$google$2f$m
 ;
 const metadata = {
     title: "THE PINK CLUB | L'Élite du Drift",
-    description: "L'événement exclusif Élite Auto. Drift, tuning et culture automobile nocturne dans notre parking souterrain d'élite."
+    description: "L'événement Élite Auto.",
+    openGraph: {
+        title: "THE PINK CLUB | L'Élite du Drift",
+        description: "L'événement exclusif Élite Auto. Drift et Rassemblement auto.",
+        url: "https://pinkclub.tsuky.ovh",
+        siteName: "THE PINK CLUB",
+        images: [
+            {
+                url: "/parking.png",
+                width: 1200,
+                height: 630,
+                alt: "THE PINK CLUB - Parking souterrain de l'élite"
+            }
+        ],
+        locale: "fr_FR",
+        type: "website"
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "THE PINK CLUB | L'Élite du Drift",
+        description: "L'événement exclusif Élite Auto. Drift et Rassemblement auto.",
+        images: [
+            "/parking.png"
+        ]
+    }
 };
 function RootLayout({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("html", {
@@ -84,12 +108,12 @@ function RootLayout({ children }) {
             children: children
         }, void 0, false, {
             fileName: "[project]/src/app/layout.tsx",
-            lineNumber: 29,
+            lineNumber: 51,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/layout.tsx",
-        lineNumber: 28,
+        lineNumber: 50,
         columnNumber: 5
     }, this);
 }

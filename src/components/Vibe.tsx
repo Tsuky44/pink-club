@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const cards = [
   {
@@ -10,7 +11,8 @@ const cards = [
     title: "RASSEMBLEMENTS",
     description: "Le seul endroit où l'esthétique rencontre la violence pure. Montre ce que tu as sous le capot et impose ton style sur le parking.",
     link: "VOIR LA GALERIE",
-    image: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=2070&auto=format&fit=crop",
+    href: "/wall-of-fame",
+    image: "/rassemblement.png",
     color: "primary",
   },
   {
@@ -18,7 +20,8 @@ const cards = [
     title: "LOCATION DRIFT",
     description: "Pas de caisse préparée ? Aucun problème. Loue l'un de nos monstres réglés sur mesure pour avaler les virages en crabe.",
     link: "VOIR LA FLOTTE",
-    image: "https://images.unsplash.com/photo-1617788138017-80ad40651399?q=80&w=2070&auto=format&fit=crop",
+    href: "/bientot-disponible",
+    image: "/location-drift.png",
     color: "secondary",
   },
   {
@@ -26,7 +29,8 @@ const cards = [
     title: "SESSIONS DRIFT",
     description: "Chaos contrôlé. Maîtrisez la transition sur notre piste intérieure sur mesure.",
     link: "RÉSERVER LA PISTE",
-    image: "https://images.unsplash.com/photo-1619405399517-d7fce0f13302?q=80&w=2070&auto=format&fit=crop",
+    href: "/bientot-disponible",
+    image: "/drift sessions.png",
     color: "tertiary",
   },
 ];
@@ -101,47 +105,48 @@ export default function Vibe() {
           };
 
           return (
-            <motion.div
-              key={card.title}
-              variants={itemVariants}
-              className={`group relative overflow-hidden bg-surface-container border transition-all duration-500 cursor-pointer ${colorClasses[card.color as keyof typeof colorClasses]}`}
-            >
-              {/* Image Container */}
-              <div className="h-80 overflow-hidden relative">
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent opacity-60" />
-              </div>
-
-              {/* Content */}
-              <div className="p-8 relative">
-                {/* Number Badge */}
-                <div className={`absolute -top-12 right-8 ${numberBgColors[card.color as keyof typeof numberBgColors]} w-12 h-12 flex items-center justify-center font-[family-name:var(--font-space-grotesk)] font-black italic text-black`}>
-                  {card.number}
+            <Link href={card.href} key={card.title} className="block h-full">
+              <motion.div
+                variants={itemVariants}
+                className={`group relative overflow-hidden bg-surface-container border transition-all duration-500 cursor-pointer h-full flex flex-col ${colorClasses[card.color as keyof typeof colorClasses]}`}
+              >
+                {/* Image Container */}
+                <div className="h-80 overflow-hidden relative shrink-0">
+                  <Image
+                    src={card.image}
+                    alt={card.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface-container to-transparent opacity-60" />
                 </div>
 
-                {/* Title */}
-                <h3 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold uppercase tracking-tighter mb-4">
-                  {card.title}
-                </h3>
+                {/* Content */}
+                <div className="p-8 relative flex flex-col flex-grow">
+                  {/* Number Badge */}
+                  <div className={`absolute -top-12 right-8 ${numberBgColors[card.color as keyof typeof numberBgColors]} w-12 h-12 flex items-center justify-center font-[family-name:var(--font-space-grotesk)] font-black italic text-black`}>
+                    {card.number}
+                  </div>
 
-                {/* Description */}
-                <p className="text-on-surface-variant font-[family-name:var(--font-manrope)] text-sm mb-6 leading-relaxed">
-                  {card.description}
-                </p>
+                  {/* Title */}
+                  <h3 className="font-[family-name:var(--font-space-grotesk)] text-2xl font-bold uppercase tracking-tighter mb-4">
+                    {card.title}
+                  </h3>
 
-                {/* Link */}
-                <div className={`flex items-center gap-2 font-[family-name:var(--font-space-grotesk)] font-bold text-xs tracking-widest group-hover:gap-4 transition-all ${card.color === "primary" ? "text-primary" : card.color === "secondary" ? "text-secondary" : "text-tertiary"}`}>
-                  {card.link}
-                  <ArrowRight size={16} />
+                  {/* Description */}
+                  <p className="text-on-surface-variant font-[family-name:var(--font-manrope)] text-sm mb-6 leading-relaxed flex-grow">
+                    {card.description}
+                  </p>
+
+                  {/* Link Button */}
+                  <span className={`flex items-center gap-2 font-[family-name:var(--font-space-grotesk)] font-bold text-xs tracking-widest group-hover:gap-4 transition-all mt-auto ${card.color === "primary" ? "text-primary" : card.color === "secondary" ? "text-secondary" : "text-tertiary"}`}>
+                    {card.link}
+                    <ArrowRight size={16} />
+                  </span>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           );
         })}
       </motion.div>

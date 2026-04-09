@@ -60,7 +60,7 @@ export default function VideoTeaser() {
               GRANDE OUVERTURE
             </h3>
             <p className="text-on-surface-variant font-[family-name:var(--font-manrope)] text-xs uppercase tracking-widest mb-6 md:mb-8">
-              Phase 1 : Collectif Drift Underground
+              Phase 1 : OUVERTURE DES PORTES
             </p>
 
             {/* Event details */}

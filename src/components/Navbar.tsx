@@ -14,8 +14,8 @@ const tiltNeon = Tilt_Neon({
 const navLinks = [
   { name: "HOME", href: "/" },
   { name: "WALL OF FAME", href: "/wall-of-fame" },
-  { name: "LOCATION DRIFT", href: "#garage" },
-  { name: "CONTACT", href: "#concept" },
+  { name: "LOCATION DRIFT", href: "/bientot-disponible" },
+  { name: "CONTACT", href: "/bientot-disponible" },
 ];
 
 export default function Navbar() {
@@ -33,9 +33,10 @@ export default function Navbar() {
       transition={{ duration: 0.8, ease: "easeOut" }}
       className="fixed top-0 z-50 w-full flex justify-between items-center px-6 md:px-10 py-5 md:py-6 bg-background/80 backdrop-blur-md border-b border-secondary/15 shadow-[0_4px_20px_rgba(227,0,113,0.1)]"
     >
+      {/* Logo - absolute left */}
       <Link
         href="/"
-        className={`text-2xl md:text-3xl tracking-tight ${tiltNeon.variable} font-[family-name:var(--font-tilt-neon)] uppercase`}
+        className={`absolute left-6 md:left-10 text-2xl md:text-3xl tracking-tight ${tiltNeon.variable} font-[family-name:var(--font-tilt-neon)] uppercase`}
         style={{
           color: "#fff0f5",
           textShadow: `
@@ -56,7 +57,8 @@ export default function Navbar() {
         THE PINK CLUB
       </Link>
 
-      <div className="hidden md:flex gap-8 lg:gap-12 items-center">
+      {/* Nav Links - centered */}
+      <div className="hidden md:flex gap-8 lg:gap-12 items-center mx-auto">
         {navLinks.map((link) => (
           <Link
             key={link.name}
@@ -70,13 +72,8 @@ export default function Navbar() {
         ))}
       </div>
 
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="px-4 md:px-8 py-2.5 md:py-3 bg-primary-container text-on-surface font-[family-name:var(--font-space-grotesk)] font-bold uppercase tracking-widest text-xs md:text-sm hover:shadow-[0_0_15px_#ff709e] transition-all"
-      >
-        REJOINDRE L'ÉQUIPE
-      </motion.button>
+      {/* Placeholder for balance - right side */}
+      <div className="hidden md:block w-[180px]" />
     </motion.nav>
   );
 }

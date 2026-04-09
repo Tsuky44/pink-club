@@ -4,31 +4,31 @@ import { motion } from "framer-motion";
 
 const scheduleItems = [
   {
-    days: "LUN - MAR",
-    activity: "Atelier Privé & Tuning de Précision",
-    status: "MEMBRES UNIQUEMENT",
-    statusColor: "secondary",
-    isDim: true,
-  },
-  {
-    days: "MER - JEU",
-    activity: "Sessions Piste Ouverte & Pratique Drift",
-    status: "CRÉNEAUX RÉSERVABLES",
+    days: "VEN 17",
+    activity: "GRANDE OUVERTURE - The Pink Club",
+    status: "21:00 - TARD",
     statusColor: "primary",
     isDim: false,
     glow: true,
   },
   {
-    days: "VEN - SAM",
-    activity: "The Pink Club Night : Événement Principal",
-    status: "20:00 - TARD",
+    days: "Prochaine semaine",
+    activity: "Bientôt disponible",
+    status: "???",
     statusColor: "secondary",
-    isDim: false,
+    isDim: true,
   },
   {
-    days: "DIMANCHE",
-    activity: "Restauration & Expo Esthétique Détail",
-    status: "CLEAN ONLY",
+    days: "Prochaine semaine",
+    activity: "Bientôt disponible",
+    status: "???",
+    statusColor: "outline",
+    isDim: true,
+  },
+  {
+    days: "Prochaine semaine",
+    activity: "Bientôt disponible",
+    status: "???",
     statusColor: "tertiary",
     isDim: true,
   },
@@ -103,7 +103,7 @@ export default function Timetable() {
                 {item.days}
               </div>
               <div
-                className={`col-span-2 ${
+                className={`col-span-2 text-center ${
                   item.isDim ? "text-on-surface-variant" : "text-on-surface"
                 } font-[family-name:var(--font-manrope)] uppercase tracking-[0.2em] text-xs md:text-sm py-3 md:py-0`}
               >

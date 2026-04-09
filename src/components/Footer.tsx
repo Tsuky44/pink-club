@@ -18,7 +18,7 @@ const socialLinks = [
 export default function Footer() {
   return (
     <footer className="bg-background w-full">
-      <div className="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 py-12 md:py-16 w-full max-w-screen-2xl mx-auto border-t border-surface-variant bg-surface-container">
+      <div className="flex flex-col md:flex-row justify-between items-center px-6 md:px-12 py-12 md:py-16 w-full border-t border-surface-variant bg-surface-container">
         {/* Logo and partner */}
         <div className="flex flex-col gap-4 text-center md:text-left">
           <div className="text-base md:text-lg font-bold text-outline font-[family-name:var(--font-manrope)] uppercase tracking-widest">
@@ -72,7 +72,7 @@ export default function Footer() {
           transition={{ duration: 0.6 }}
           className="mt-8 md:mt-0 text-[10px] tracking-[0.2em] text-outline font-[family-name:var(--font-manrope)] uppercase text-center md:text-right"
         >
-          OCT 24. 2026 THE PINK CLUB. TOUS DROITS RÉSERVÉS.
+          2026 THE PINK CLUB. TOUS DROITS RÉSERVÉS.
         </motion.div>
       </div>
     </footer>
