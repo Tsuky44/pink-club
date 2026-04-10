@@ -97,14 +97,14 @@ export default function Navbar() {
               <LogOut size={16} />
             </button>
           </>
-        ) : (
+        ) : process.env.NEXT_PUBLIC_FEATURE_REGISTRATION === "true" ? (
           <Link
             href="/auth/login"
             className="font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-xs px-5 py-2.5 border border-primary text-primary hover:bg-primary hover:text-white transition-all"
           >
             REJOINDRE L&apos;ÉQUIPE
           </Link>
-        )}
+        ) : null}
       </div>
     </motion.nav>
   );

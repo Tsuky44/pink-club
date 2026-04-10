@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getTopContenders, getPhotos } from "@/actions/galleryActions";
 import { WallOfFameClient } from "@/components/wall-of-fame/WallOfFameClient";
 
@@ -9,6 +10,10 @@ export const metadata = {
 };
 
 export default async function WallOfFamePage() {
+  if (process.env.NEXT_PUBLIC_FEATURE_WALL_OF_FAME !== "true") {
+    redirect("/bientot-disponible");
+  }
+
   const topPhotos = await getTopContenders();
   const initialPhotos = await getPhotos(0, 12);
 

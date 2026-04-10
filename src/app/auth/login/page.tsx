@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -24,6 +24,13 @@ function AuthForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Force login tab when registration is disabled
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_FEATURE_REGISTRATION !== "true") {
+      setTab("login");
+    }
+  }, []);
 
   const inputClass = "w-full bg-surface-variant border border-white/10 text-white px-4 py-3 text-sm focus:outline-none focus:border-primary transition-colors";
   const labelClass = "block text-xs uppercase tracking-widest text-on-surface-variant mb-2";
@@ -104,21 +111,32 @@ function AuthForm() {
       >
         <div className="bg-surface-container border border-surface-variant p-8">
           {/* Tabs */}
-          <div className="flex mb-8 border-b border-surface-variant">
-            {(["login", "register"] as const).map((t) => (
-              <button
-                key={t}
-                onClick={() => { setTab(t); setError(""); setSuccess(""); }}
-                className={`flex-1 pb-3 font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-xs transition-colors ${
-                  tab === t
-                    ? "border-b-2 border-primary text-white -mb-[1px]"
-                    : "text-on-surface-variant hover:text-white"
-                }`}
-              >
-                {t === "login" ? "CONNEXION" : "CRÉER UN COMPTE"}
-              </button>
-            ))}
-          </div>
+          {process.env.NEXT_PUBLIC_FEATURE_REGISTRATION === "true" ? (
+            <div className="flex mb-8 border-b border-surface-variant">
+              {(["login", "register"] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => { setTab(t); setError(""); setSuccess(""); }}
+                  className={`flex-1 pb-3 font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-xs transition-colors ${
+                    tab === t
+                      ? "border-b-2 border-primary text-white -mb-[1px]"
+                      : "text-on-surface-variant hover:text-white"
+                  }`}
+                >
+                  {t === "login" ? "CONNEXION" : "CRÉER UN COMPTE"}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="mb-6 pb-4 border-b border-surface-variant">
+              <h2 className="font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-white text-sm">
+                CONNEXION ADMIN
+              </h2>
+              <p className="text-on-surface-variant text-xs mt-1">
+                Les inscriptions membres seront bientôt disponibles.
+              </p>
+            </div>
+          )}
 
           {error && (
             <div className="mb-5 p-3 bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
