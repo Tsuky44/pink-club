@@ -74,6 +74,54 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/auth/login": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/auth/login",
+      "dataRoute": "/auth/login.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
+    "/bientot-disponible": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/bientot-disponible",
+      "dataRoute": "/bientot-disponible.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/favicon.ico": {
       "initialHeaders": {
         "cache-control": "public, max-age=0, must-revalidate",
@@ -103,7 +151,7 @@
         "x-next-revalidate-tag-token"
       ]
     },
-    "/wall-of-fame": {
+    "/flotte": {
       "experimentalBypassFor": [
         {
           "type": "header",
@@ -116,8 +164,8 @@
         }
       ],
       "initialRevalidateSeconds": false,
-      "srcRoute": "/wall-of-fame",
-      "dataRoute": "/wall-of-fame.rsc",
+      "srcRoute": "/flotte",
+      "dataRoute": "/flotte.rsc",
       "allowHeader": [
         "host",
         "x-matched-path",

@@ -42,7 +42,7 @@ export function PhotoCard({ photo, rank, onClick, onKudo, hasVoted }: PhotoCardP
   const handleCopyLink = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      const absoluteUrl = `${window.location.origin}${photo.image_url}`;
+      const absoluteUrl = `${window.location.origin}${photo.imageUrl}`;
       await navigator.clipboard.writeText(absoluteUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -65,8 +65,8 @@ export function PhotoCard({ photo, rank, onClick, onKudo, hasVoted }: PhotoCardP
     >
       {/* Image */}
       <Image
-        src={photo.image_url}
-        alt={`${photo.car_model} par ${photo.photographer_name}`}
+        src={photo.imageUrl}
+        alt={`${photo.carModel} par ${photo.photographerName}`}
         width={600}
         height={400}
         className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
@@ -92,10 +92,10 @@ export function PhotoCard({ photo, rank, onClick, onKudo, hasVoted }: PhotoCardP
       <div className="absolute bottom-0 left-0 right-0 p-6 flex flex-col md:flex-row items-end justify-between gap-4">
         <div>
           <h3 className="font-[family-name:var(--font-space-grotesk)] font-black text-2xl text-primary uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(255,0,127,0.8)] leading-tight">
-            {photo.photographer_name}
+            {photo.photographerName}
           </h3>
           <p className="font-[family-name:var(--font-manrope)] text-xs text-secondary tracking-widest uppercase font-bold mt-1">
-            {photo.car_model} {rank && `• #${String(rank).padStart(2, "0")}`}
+            {photo.carModel} {rank && `• #${String(rank).padStart(2, "0")}`}
           </p>
         </div>
         

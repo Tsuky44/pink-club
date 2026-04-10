@@ -1,7 +1,21 @@
 {
   "/_global-error/page": "app/_global-error/page.js",
   "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/admin/events/[eventId]/route": "app/api/admin/events/[eventId]/route.js",
+  "/api/admin/events/route": "app/api/admin/events/route.js",
+  "/api/admin/users/[userId]/route": "app/api/admin/users/[userId]/route.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/kudos/[photoId]/route": "app/api/kudos/[photoId]/route.js",
+  "/api/photos/[id]/route": "app/api/photos/[id]/route.js",
+  "/api/photos/route": "app/api/photos/route.js",
+  "/api/photos/top/route": "app/api/photos/top/route.js",
+  "/api/rsvp/route": "app/api/rsvp/route.js",
+  "/api/uploads/[...path]/route": "app/api/uploads/[...path]/route.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/bientot-disponible/page": "app/bientot-disponible/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/flotte/page": "app/flotte/page.js",
   "/page": "app/page.js",
   "/wall-of-fame/page": "app/wall-of-fame/page.js"
 }

@@ -47,7 +47,7 @@ export function Lightbox({
   const handleCopyLink = async () => {
     if (!photo) return;
     try {
-      const absoluteUrl = `${window.location.origin}${photo.image_url}`;
+      const absoluteUrl = `${window.location.origin}${photo.imageUrl}`;
       await navigator.clipboard.writeText(absoluteUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -85,8 +85,8 @@ export function Lightbox({
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={photo.image_url}
-              alt={`${photo.car_model} par ${photo.photographer_name}`}
+              src={photo.imageUrl}
+              alt={`${photo.carModel} par ${photo.photographerName}`}
               width={1200}
               height={800}
               className="w-full h-auto max-h-[85vh] object-contain"
@@ -98,10 +98,10 @@ export function Lightbox({
               <div className="flex flex-col md:flex-row items-end justify-between gap-4">
                 <div>
                   <h3 className="font-[family-name:var(--font-space-grotesk)] font-black text-3xl text-primary uppercase tracking-tighter drop-shadow-[0_0_10px_rgba(255,0,127,0.8)]">
-                    {photo.photographer_name}
+                    {photo.photographerName}
                   </h3>
                   <p className="font-[family-name:var(--font-manrope)] text-sm text-secondary tracking-widest uppercase font-bold mt-1">
-                    {photo.car_model}
+                    {photo.carModel}
                   </p>
                 </div>
 

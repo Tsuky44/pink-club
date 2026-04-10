@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Tilt_Neon } from "next/font/google";
+import { useSession, signOut } from "next-auth/react";
+import { LogOut, Shield } from "lucide-react";
 
 const tiltNeon = Tilt_Neon({
   weight: "400",
@@ -20,6 +22,7 @@ const navLinks = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -72,8 +75,37 @@ export default function Navbar() {
         ))}
       </div>
 
-      {/* Placeholder for balance - right side */}
-      <div className="hidden md:block w-[180px]" />
+      {/* Right side - auth state */}
+      <div className="absolute right-6 md:right-10 hidden md:flex items-center gap-3">
+        {status === "loading" ? (
+          <div className="w-[180px]" />
+        ) : session ? (
+          <>
+            <span className="font-[family-name:var(--font-space-grotesk)] text-xs text-white/60 uppercase tracking-widest truncate max-w-[100px]">
+              {session.user?.name ?? session.user?.email}
+            </span>
+            {session.user?.role === "admin" && (
+              <Link href="/admin" className="text-primary hover:text-primary/80 transition-colors" title="Admin">
+                <Shield size={16} />
+              </Link>
+            )}
+            <button
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="text-white/40 hover:text-white transition-colors"
+              title="Déconnexion"
+            >
+              <LogOut size={16} />
+            </button>
+          </>
+        ) : (
+          <Link
+            href="/auth/login"
+            className="font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-xs px-5 py-2.5 border border-primary text-primary hover:bg-primary hover:text-white transition-all"
+          >
+            REJOINDRE L&apos;ÉQUIPE
+          </Link>
+        )}
+      </div>
     </motion.nav>
   );
 }

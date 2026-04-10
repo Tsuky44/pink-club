@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Manrope } from "next/font/google";
 import "./globals.css";
+import SessionProvider from "@/components/SessionProvider";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -49,7 +50,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${spaceGrotesk.variable} ${manrope.variable} dark antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground font-[family-name:var(--font-manrope)]">
-        {children}
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 "use server";
 
-import { getDb } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
 import { writeFile, unlink } from "fs/promises";
 import { join } from "path";
 import { mkdir } from "fs/promises";
@@ -11,75 +11,67 @@ const UPLOAD_DIR = join(process.cwd(), "public", "uploads", "gallery");
 
 export interface Photo {
   id: number;
-  photographer_name: string;
-  car_model: string;
-  image_url: string;
+  photographerName: string;
+  carModel: string;
+  imageUrl: string;
   kudos: number;
-  created_at: string;
+  createdAt: Date;
+  userId: string | null;
 }
 
 // Récupérer les Top Contenders (6 photos avec le plus de kudos)
 export async function getTopContenders(): Promise<Photo[]> {
-  const db = getDb();
-  const stmt = db.prepare(
-    "SELECT * FROM photos ORDER BY kudos DESC, created_at DESC LIMIT 6"
-  );
-  return stmt.all() as Photo[];
+  return prisma.photo.findMany({
+    take: 6,
+    orderBy: [{ kudos: "desc" }, { createdAt: "desc" }],
+  });
 }
 
 // Récupérer les photos avec pagination (pour scroll infini)
 export async function getPhotos(offset: number = 0, limit: number = 12): Promise<Photo[]> {
-  const db = getDb();
-  const stmt = db.prepare(
-    "SELECT * FROM photos ORDER BY created_at DESC LIMIT ? OFFSET ?"
-  );
-  return stmt.all(limit, offset) as Photo[];
+  return prisma.photo.findMany({
+    take: limit,
+    skip: offset,
+    orderBy: { createdAt: "desc" },
+  });
 }
 
 // Ajouter un kudo (+1)
 export async function addKudo(photoId: number): Promise<number> {
-  const db = getDb();
-  const stmt = db.prepare(
-    "UPDATE photos SET kudos = kudos + 1 WHERE id = ? RETURNING kudos"
-  );
-  const result = stmt.get(photoId) as { kudos: number };
+  const photo = await prisma.photo.update({
+    where: { id: photoId },
+    data: { kudos: { increment: 1 } },
+  });
   revalidatePath("/wall-of-fame");
-  return result.kudos;
+  return photo.kudos;
 }
 
 // Retirer un kudo (-1)
 export async function removeKudo(photoId: number): Promise<number> {
-  const db = getDb();
-  const stmt = db.prepare(
-    "UPDATE photos SET kudos = MAX(0, kudos - 1) WHERE id = ? RETURNING kudos"
-  );
-  const result = stmt.get(photoId) as { kudos: number };
+  const current = await prisma.photo.findUnique({ where: { id: photoId } });
+  const photo = await prisma.photo.update({
+    where: { id: photoId },
+    data: { kudos: Math.max(0, (current?.kudos ?? 1) - 1) },
+  });
   revalidatePath("/wall-of-fame");
-  return result.kudos;
+  return photo.kudos;
 }
 
 // Supprimer une photo
 export async function deletePhoto(photoId: number): Promise<{ success: boolean; error?: string }> {
   try {
-    const db = getDb();
-    
-    // Récupérer l'URL de l'image avant suppression
-    const getStmt = db.prepare("SELECT image_url FROM photos WHERE id = ?");
-    const photo = getStmt.get(photoId) as { image_url: string } | undefined;
+    const photo = await prisma.photo.findUnique({ where: { id: photoId } });
     
     if (!photo) {
       return { success: false, error: "Photo non trouvée" };
     }
     
-    // Supprimer le fichier physique
-    const filepath = join(process.cwd(), "public", photo.image_url);
+    const filepath = join(process.cwd(), "public", photo.imageUrl);
     if (existsSync(filepath)) {
       await unlink(filepath);
     }
     
-    // Supprimer de la DB
-    const deleteStmt = db.prepare("DELETE FROM photos WHERE id = ?");
-    deleteStmt.run(photoId);
+    await prisma.photo.delete({ where: { id: photoId } });
     
     revalidatePath("/wall-of-fame");
     return { success: true };
@@ -102,32 +94,24 @@ export async function uploadPhoto(
       return { success: false, error: "Tous les champs sont requis" };
     }
 
-    // Créer le dossier uploads s'il n'existe pas
     await mkdir(UPLOAD_DIR, { recursive: true });
 
-    // Générer un nom de fichier unique
     const timestamp = Date.now();
     const extension = imageFile.name.split(".").pop() || "jpg";
     const filename = `${timestamp}_${photographerName.replace(/\s+/g, "_")}.${extension}`;
     const filepath = join(UPLOAD_DIR, filename);
 
-    // Sauvegarder le fichier
     const bytes = await imageFile.arrayBuffer();
     await writeFile(filepath, Buffer.from(bytes));
 
-    // URL relative pour la DB
     const imageUrl = `/uploads/gallery/${filename}`;
 
-    // Insérer en DB
-    const db = getDb();
-    const stmt = db.prepare(
-      "INSERT INTO photos (photographer_name, car_model, image_url) VALUES (?, ?, ?) RETURNING *"
-    );
-    const photo = stmt.get(photographerName, carModel, imageUrl) as Photo;
+    const photo = await prisma.photo.create({
+      data: { photographerName, carModel, imageUrl },
+    });
 
     revalidatePath("/wall-of-fame");
     
-    // Retourner le token de suppression (l'ID de la photo)
     return { success: true, photo, deleteToken: photo.id.toString() };
   } catch (error) {
     console.error("Erreur upload:", error);

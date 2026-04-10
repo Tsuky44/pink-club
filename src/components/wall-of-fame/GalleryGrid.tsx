@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import { PhotoCard } from "./PhotoCard";
 import { Lightbox } from "./Lightbox";
-import { getPhotos, deletePhoto, addKudo, removeKudo, Photo } from "@/actions/galleryActions";
+import { getPhotos, deletePhoto, Photo } from "@/actions/galleryActions";
 import { useInView } from "framer-motion";
 
 interface GalleryGridProps {
@@ -14,14 +14,13 @@ interface GalleryGridProps {
   filter?: 'recent' | 'kudos' | 'drivers';
 }
 
-// Helper to get voted photos from localStorage
+// Voted tracking still uses localStorage for guest users (fallback)
 const getVotedPhotos = (): number[] => {
   if (typeof window === "undefined") return [];
   const voted = localStorage.getItem("pink-club-voted-photos");
   return voted ? JSON.parse(voted) : [];
 };
 
-// Helper to save voted photo
 const saveVotedPhoto = (photoId: number) => {
   const voted = getVotedPhotos();
   if (!voted.includes(photoId)) {
@@ -30,7 +29,6 @@ const saveVotedPhoto = (photoId: number) => {
   }
 };
 
-// Helper to remove voted photo
 const removeVotedPhoto = (photoId: number) => {
   const voted = getVotedPhotos();
   const updated = voted.filter((id) => id !== photoId);
@@ -91,39 +89,26 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
   const handleKudo = async (photoId: number) => {
     const voted = getVotedPhotos();
     const hasVoted = voted.includes(photoId);
-    
+
+    // Optimistic update
     if (hasVoted) {
-      // Remove kudo
       removeVotedPhoto(photoId);
-      setPhotos((prev) => prev.map((p) => 
-        p.id === photoId ? { ...p, kudos: p.kudos - 1 } : p
-      ));
-      
-      try {
-        await removeKudo(photoId);
-      } catch (error) {
-        // Rollback
-        saveVotedPhoto(photoId);
-        setPhotos((prev) => prev.map((p) => 
-          p.id === photoId ? { ...p, kudos: p.kudos + 1 } : p
-        ));
-      }
+      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: p.kudos - 1 } : p));
     } else {
-      // Add kudo
       saveVotedPhoto(photoId);
-      setPhotos((prev) => prev.map((p) => 
-        p.id === photoId ? { ...p, kudos: p.kudos + 1 } : p
-      ));
-      
-      try {
-        await addKudo(photoId);
-      } catch (error) {
-        // Rollback
-        removeVotedPhoto(photoId);
-        setPhotos((prev) => prev.map((p) => 
-          p.id === photoId ? { ...p, kudos: p.kudos - 1 } : p
-        ));
-      }
+      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: p.kudos + 1 } : p));
+    }
+
+    try {
+      const res = await fetch(`/api/kudos/${photoId}`, { method: "POST" });
+      const data = await res.json();
+      // Sync with real server count
+      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: data.kudos } : p));
+      if (data.voted) saveVotedPhoto(photoId); else removeVotedPhoto(photoId);
+    } catch {
+      // Rollback on error
+      if (hasVoted) saveVotedPhoto(photoId); else removeVotedPhoto(photoId);
+      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: p.kudos + (hasVoted ? 1 : -1) } : p));
     }
   };
 
@@ -160,8 +145,8 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
       case 'drivers':
         // Group by photographer and sort by count, then flatten
         const byDriver = result.reduce((acc, photo) => {
-          acc[photo.photographer_name] = acc[photo.photographer_name] || [];
-          acc[photo.photographer_name].push(photo);
+          acc[photo.photographerName] = acc[photo.photographerName] || [];
+          acc[photo.photographerName].push(photo);
           return acc;
         }, {} as Record<string, Photo[]>);
         
@@ -172,7 +157,7 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
       case 'recent':
       default:
         // Sort by created_at DESC
-        result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         break;
     }
     

@@ -21,7 +21,56 @@
     "afterFiles": [],
     "fallback": []
   },
-  "dynamicRoutes": [],
+  "dynamicRoutes": [
+    {
+      "page": "/api/admin/events/[eventId]",
+      "regex": "^/api/admin/events/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPeventId": "nxtPeventId"
+      },
+      "namedRegex": "^/api/admin/events/(?<nxtPeventId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/admin/users/[userId]",
+      "regex": "^/api/admin/users/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPuserId": "nxtPuserId"
+      },
+      "namedRegex": "^/api/admin/users/(?<nxtPuserId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/auth/[...nextauth]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPnextauth": "nxtPnextauth"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPnextauth>.+?)(?:/)?$"
+    },
+    {
+      "page": "/api/kudos/[photoId]",
+      "regex": "^/api/kudos/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPphotoId": "nxtPphotoId"
+      },
+      "namedRegex": "^/api/kudos/(?<nxtPphotoId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/photos/[id]",
+      "regex": "^/api/photos/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/photos/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/uploads/[...path]",
+      "regex": "^/api/uploads/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPpath": "nxtPpath"
+      },
+      "namedRegex": "^/api/uploads/(?<nxtPpath>.+?)(?:/)?$"
+    }
+  ],
   "staticRoutes": [
     {
       "page": "/",
@@ -42,10 +91,58 @@
       "namedRegex": "^/_not\\-found(?:/)?$"
     },
     {
+      "page": "/admin",
+      "regex": "^/admin(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin(?:/)?$"
+    },
+    {
+      "page": "/api/admin/events",
+      "regex": "^/api/admin/events(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/admin/events(?:/)?$"
+    },
+    {
+      "page": "/api/photos",
+      "regex": "^/api/photos(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/photos(?:/)?$"
+    },
+    {
+      "page": "/api/photos/top",
+      "regex": "^/api/photos/top(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/photos/top(?:/)?$"
+    },
+    {
+      "page": "/api/rsvp",
+      "regex": "^/api/rsvp(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/rsvp(?:/)?$"
+    },
+    {
+      "page": "/auth/login",
+      "regex": "^/auth/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/auth/login(?:/)?$"
+    },
+    {
+      "page": "/bientot-disponible",
+      "regex": "^/bientot\\-disponible(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/bientot\\-disponible(?:/)?$"
+    },
+    {
       "page": "/favicon.ico",
       "regex": "^/favicon\\.ico(?:/)?$",
       "routeKeys": {},
       "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/flotte",
+      "regex": "^/flotte(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/flotte(?:/)?$"
     },
     {
       "page": "/wall-of-fame",

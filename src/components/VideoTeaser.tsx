@@ -7,30 +7,45 @@ import TeaserVideo from "./TeaserVideo";
 import { GTAMapModal } from "./GTAMapModal";
 
 export default function VideoTeaser() {
-  const [rsvpCount, setRsvpCount] = useState(47);
+  const [rsvpCount, setRsvpCount] = useState(0);
   const [hasClicked, setHasClicked] = useState(false);
+  const [eventId, setEventId] = useState<string | null>(null);
   const [isMapOpen, setIsMapOpen] = useState(false);
 
-  // Check localStorage on mount
-  useEffect(() => {
-    const clicked = localStorage.getItem("pinkClubRsvp");
-    if (clicked === "true") {
-      setHasClicked(true);
-    }
-  }, []);
+  const fetchRsvp = async () => {
+    try {
+      const res = await fetch("/api/rsvp");
+      const data = await res.json();
+      setRsvpCount(data.count ?? 0);
+      setEventId(data.eventId ?? null);
+    } catch { /* ignore */ }
+  };
 
-  // Commande secrète pour reset : Ctrl + Shift + 0 (zéro)
+  // Initial load + setup
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === "0") {
-        setRsvpCount(0);
-        localStorage.removeItem("pinkClubRsvp");
-        setHasClicked(false);
-        console.log("🔥 Compteur reset !");
-      }
+    fetchRsvp();
+
+    const clicked = localStorage.getItem("pinkClubRsvp");
+    if (clicked === "true") setHasClicked(true);
+
+    // Generate persistent guest token if not exists
+    if (!localStorage.getItem("pinkClubGuestToken")) {
+      localStorage.setItem("pinkClubGuestToken", crypto.randomUUID());
+    }
+
+    // Poll every 15s to stay in sync with other browsers
+    const interval = setInterval(fetchRsvp, 15000);
+
+    // Refresh when tab becomes visible again
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") fetchRsvp();
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, []);
   return (
     <section id="garage" className="py-16 md:py-24 px-4 md:px-10 bg-surface-container-low">
@@ -105,10 +120,22 @@ export default function VideoTeaser() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => {
+                  onClick={async () => {
                     setRsvpCount(c => c + 1);
                     localStorage.setItem("pinkClubRsvp", "true");
                     setHasClicked(true);
+                    if (eventId) {
+                      try {
+                        const guestToken = localStorage.getItem("pinkClubGuestToken");
+                        const res = await fetch("/api/rsvp", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ eventId, guestToken }),
+                        });
+                        const data = await res.json();
+                        if (data.count !== undefined) setRsvpCount(data.count);
+                      } catch { /* keep optimistic count */ }
+                    }
                   }}
                   className="flex-1 py-4 bg-primary font-[family-name:var(--font-space-grotesk)] font-black uppercase tracking-widest text-sm text-white hover:shadow-[0_0_30px_rgba(255,0,127,0.5)] transition-all flex items-center justify-center gap-2"
                 >

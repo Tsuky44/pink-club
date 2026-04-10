@@ -72,7 +72,7 @@ self.__SERVER_FILES_MANIFEST={
       "qualities": [
         75
       ],
-      "unoptimized": false,
+      "unoptimized": true,
       "customCacheHandler": false
     },
     "devIndicators": {
@@ -109,7 +109,7 @@ self.__SERVER_FILES_MANIFEST={
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "C:\\Users\\Mathis\\Documents\\Project\\pink club",
+    "outputFileTracingRoot": "C:\\Users\\Mathis\\Documents\\Project\\pink club\\pink-club",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -312,12 +312,12 @@ self.__SERVER_FILES_MANIFEST={
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "C:\\Users\\Mathis\\Documents\\Project\\pink club"
+      "root": "C:\\Users\\Mathis\\Documents\\Project\\pink club\\pink-club"
     },
     "distDirRoot": ".next"
   },
   "appDir": "C:\\Users\\Mathis\\Documents\\Project\\pink club\\pink-club",
-  "relativeAppDir": "pink-club",
+  "relativeAppDir": "",
   "files": [
     ".next\\routes-manifest.json",
     ".next\\server\\pages-manifest.json",
