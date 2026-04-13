@@ -15,17 +15,19 @@ const manrope = Manrope({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const SITE_URL = "https://pinkclub.tsuky.ovh";
+
 export const metadata: Metadata = {
   title: "THE PINK CLUB | L'Élite du Drift",
   description: "L'événement Élite Auto.",
   openGraph: {
     title: "THE PINK CLUB | L'Élite du Drift",
     description: "L'événement exclusif Élite Auto. Drift et Rassemblement auto.",
-    url: "https://pinkclub.tsuky.ovh",
+    url: SITE_URL,
     siteName: "THE PINK CLUB",
     images: [
       {
-        url: "/parking.png",
+        url: `${SITE_URL}/parking.png`,
         width: 1200,
         height: 630,
         alt: "THE PINK CLUB - Parking souterrain de l'élite",
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "THE PINK CLUB | L'Élite du Drift",
     description: "L'événement exclusif Élite Auto. Drift et Rassemblement auto.",
-    images: ["/parking.png"],
+    images: [`${SITE_URL}/parking.png`],
   },
 };
 
