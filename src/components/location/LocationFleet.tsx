@@ -51,15 +51,14 @@ export default function LocationFleet() {
           {cars.map((car, index) => (
             <FadeIn key={car.name} delay={index * 0.08}>
               <div className={`group bg-surface flex flex-col border-b-4 ${car.borderClass} shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(0,238,252,0.15)] transition-all duration-300`}>
-                <div className="h-48 bg-surface-container-high relative overflow-hidden">
+                <div className="h-56 bg-surface-container-high relative overflow-hidden">
                   <div className={`absolute inset-0 bg-gradient-to-br ${car.gradientClass} to-surface-container-high`} />
-                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <div className="absolute inset-0 flex items-center justify-center p-2">
                     <Image
                       src={car.image}
                       alt={car.name}
-                      width={200}
-                      height={120}
-                      className="object-contain drop-shadow-lg"
+                      fill
+                      className="object-cover drop-shadow-lg"
                     />
                   </div>
                 </div>
