@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import { PhotoCard } from "./PhotoCard";
 import { Lightbox } from "./Lightbox";
-import { getPhotos, deletePhoto, Photo } from "@/actions/galleryActions";
+import { getPhotos, deletePhoto, getUserVotedPhotoIds, Photo } from "@/actions/galleryActions";
 import { useInView } from "framer-motion";
 
 interface GalleryGridProps {
@@ -14,32 +14,14 @@ interface GalleryGridProps {
   filter?: 'recent' | 'kudos' | 'drivers';
 }
 
-// Voted tracking still uses localStorage for guest users (fallback)
-const getVotedPhotos = (): number[] => {
-  if (typeof window === "undefined") return [];
-  const voted = localStorage.getItem("pink-club-voted-photos");
-  return voted ? JSON.parse(voted) : [];
-};
-
-const saveVotedPhoto = (photoId: number) => {
-  const voted = getVotedPhotos();
-  if (!voted.includes(photoId)) {
-    voted.push(photoId);
-    localStorage.setItem("pink-club-voted-photos", JSON.stringify(voted));
-  }
-};
-
-const removeVotedPhoto = (photoId: number) => {
-  const voted = getVotedPhotos();
-  const updated = voted.filter((id) => id !== photoId);
-  localStorage.setItem("pink-club-voted-photos", JSON.stringify(updated));
-};
-
 export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMore: initialHasMore = false, filter = 'recent' }: GalleryGridProps) {
   const [photos, setPhotos] = useState<Photo[]>(initialPhotos);
   const [offset, setOffset] = useState(12);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Voted IDs — source of truth is server for logged-in users, localStorage for guests
+  const [votedIds, setVotedIds] = useState<Set<number>>(new Set());
   
   // Lightbox state
   const [selectedPhotoId, setSelectedPhotoId] = useState<number | null>(null);
@@ -54,6 +36,14 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
     const tokens = localStorage.getItem("pink-club-upload-tokens");
     return tokens ? JSON.parse(tokens) : [];
   };
+
+  // On mount: sync voted state from server (DB for logged-in users, cookie for guests)
+  useEffect(() => {
+    const photoIds = initialPhotos.map((p) => p.id);
+    getUserVotedPhotoIds(photoIds)
+      .then((ids) => setVotedIds(new Set(ids)))
+      .catch(() => {});
+  }, []);
 
   const loadMore = useCallback(async () => {
     if (isLoading || !hasMore || isTopSection) return;
@@ -87,28 +77,38 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
   };
 
   const handleKudo = async (photoId: number) => {
-    const voted = getVotedPhotos();
-    const hasVoted = voted.includes(photoId);
+    const hasVoted = votedIds.has(photoId);
 
     // Optimistic update
-    if (hasVoted) {
-      removeVotedPhoto(photoId);
-      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: p.kudos - 1 } : p));
-    } else {
-      saveVotedPhoto(photoId);
-      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: p.kudos + 1 } : p));
-    }
+    setVotedIds((prev) => {
+      const next = new Set(prev);
+      if (hasVoted) next.delete(photoId); else next.add(photoId);
+      return next;
+    });
+    setPhotos((prev) => prev.map((p) =>
+      p.id === photoId ? { ...p, kudos: p.kudos + (hasVoted ? -1 : 1) } : p
+    ));
 
     try {
       const res = await fetch(`/api/kudos/${photoId}`, { method: "POST" });
       const data = await res.json();
-      // Sync with real server count
+      // Sync with real server count and voted state
       setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: data.kudos } : p));
-      if (data.voted) saveVotedPhoto(photoId); else removeVotedPhoto(photoId);
+      setVotedIds((prev) => {
+        const next = new Set(prev);
+        if (data.voted) next.add(photoId); else next.delete(photoId);
+        return next;
+      });
     } catch {
       // Rollback on error
-      if (hasVoted) saveVotedPhoto(photoId); else removeVotedPhoto(photoId);
-      setPhotos((prev) => prev.map((p) => p.id === photoId ? { ...p, kudos: p.kudos + (hasVoted ? 1 : -1) } : p));
+      setVotedIds((prev) => {
+        const next = new Set(prev);
+        if (hasVoted) next.add(photoId); else next.delete(photoId);
+        return next;
+      });
+      setPhotos((prev) => prev.map((p) =>
+        p.id === photoId ? { ...p, kudos: p.kudos + (hasVoted ? 1 : -1) } : p
+      ));
     }
   };
 
@@ -184,7 +184,7 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
               rank={isTopSection ? index + 1 : undefined}
               onClick={() => handlePhotoClick(photo.id)}
               onKudo={() => handleKudo(photo.id)}
-              hasVoted={getVotedPhotos().includes(photo.id)}
+              hasVoted={votedIds.has(photo.id)}
             />
           </motion.div>
         ))}
@@ -208,7 +208,7 @@ export function GalleryGrid({ photos: initialPhotos, isTopSection = false, hasMo
         }}
         onKudo={selectedPhotoId ? () => handleKudo(selectedPhotoId) : () => {}}
         onDelete={canDeleteSelected && selectedPhotoId ? () => handleDelete(selectedPhotoId) : undefined}
-        hasVoted={selectedPhotoId ? getVotedPhotos().includes(selectedPhotoId) : false}
+        hasVoted={selectedPhotoId ? votedIds.has(selectedPhotoId) : false}
       />
     </>
   );

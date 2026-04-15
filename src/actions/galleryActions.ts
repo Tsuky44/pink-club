@@ -1,6 +1,8 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
+import { cookies } from "next/headers";
 import { writeFile, unlink } from "fs/promises";
 import { join } from "path";
 import { mkdir } from "fs/promises";
@@ -34,6 +36,30 @@ export async function getPhotos(offset: number = 0, limit: number = 12): Promise
     skip: offset,
     orderBy: { createdAt: "desc" },
   });
+}
+
+// Récupérer les IDs des photos votées par l'utilisateur connecté ou le guest (cookie)
+export async function getUserVotedPhotoIds(photoIds: number[]): Promise<number[]> {
+  const session = await auth();
+
+  if (session?.user?.id) {
+    const votes = await prisma.vote.findMany({
+      where: { userId: session.user.id, photoId: { in: photoIds } },
+      select: { photoId: true },
+    });
+    return votes.map((v) => v.photoId);
+  }
+
+  // Guest fallback: check cookie UUID
+  const jar = await cookies();
+  const guestId = jar.get("pk_guest_id")?.value;
+  if (!guestId) return [];
+
+  const votes = await prisma.vote.findMany({
+    where: { guestId, photoId: { in: photoIds } },
+    select: { photoId: true },
+  });
+  return votes.map((v) => v.photoId);
 }
 
 // Ajouter un kudo (+1)

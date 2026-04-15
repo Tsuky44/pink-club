@@ -48,6 +48,18 @@
       "filename": "src/actions/galleryActions.ts",
       "exportedName": "uploadPhoto"
     },
+    "40ccd231fbed7a5e276608c220c085c624dd541beb": {
+      "workers": {
+        "app/wall-of-fame/page": {
+          "moduleId": "[project]/.next-internal/server/app/wall-of-fame/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/actions/galleryActions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "getUserVotedPhotoIds",
+          "filename": "src/actions/galleryActions.ts"
+        }
+      },
+      "filename": "src/actions/galleryActions.ts",
+      "exportedName": "getUserVotedPhotoIds"
+    },
     "40f9f34ff316afa98348ef88ae71db91d7d4e54330": {
       "workers": {
         "app/wall-of-fame/page": {

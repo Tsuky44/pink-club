@@ -96,14 +96,16 @@ model Comment {
 
 model Vote {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String?
+  guestId   String?
   photoId   Int
   createdAt DateTime @default(now())
 
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  photo Photo @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  user  User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  photo Photo  @relation(fields: [photoId], references: [id], onDelete: Cascade)
 
   @@unique([userId, photoId])
+  @@unique([guestId, photoId])
 }
 
 model Event {

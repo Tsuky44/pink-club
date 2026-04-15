@@ -13,29 +13,6 @@ interface PhotoCardProps {
   hasVoted?: boolean;
 }
 
-// Helper to get voted photos from localStorage
-const getVotedPhotos = (): number[] => {
-  if (typeof window === "undefined") return [];
-  const voted = localStorage.getItem("pink-club-voted-photos");
-  return voted ? JSON.parse(voted) : [];
-};
-
-// Helper to save voted photo
-const saveVotedPhoto = (photoId: number) => {
-  const voted = getVotedPhotos();
-  if (!voted.includes(photoId)) {
-    voted.push(photoId);
-    localStorage.setItem("pink-club-voted-photos", JSON.stringify(voted));
-  }
-};
-
-// Helper to remove voted photo
-const removeVotedPhoto = (photoId: number) => {
-  const voted = getVotedPhotos();
-  const updated = voted.filter((id) => id !== photoId);
-  localStorage.setItem("pink-club-voted-photos", JSON.stringify(updated));
-};
-
 export function PhotoCard({ photo, rank, onClick, onKudo, hasVoted }: PhotoCardProps) {
   const [copied, setCopied] = useState(false);
 

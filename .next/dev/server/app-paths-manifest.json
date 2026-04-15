@@ -1,5 +1,7 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/kudos/[photoId]/route": "app/api/kudos/[photoId]/route.js",
+  "/api/photos/[id]/comments/route": "app/api/photos/[id]/comments/route.js",
   "/api/rsvp/route": "app/api/rsvp/route.js",
   "/contact/page": "app/contact/page.js",
   "/location/page": "app/location/page.js",
