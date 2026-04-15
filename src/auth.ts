@@ -8,6 +8,9 @@ import { prisma } from "@/lib/prisma";
 const discordEnabled =
   !!process.env.DISCORD_CLIENT_ID && !!process.env.DISCORD_CLIENT_SECRET;
 
+// Optional: Guild ID of your GTA RP server to fetch nicknames
+const DISCORD_GUILD_ID = process.env.DISCORD_GUILD_ID;
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -17,6 +20,49 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           DiscordProvider({
             clientId: process.env.DISCORD_CLIENT_ID!,
             clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+            authorization: {
+              params: {
+                scope: "identify guilds guilds.members.read",
+              },
+            },
+            async profile(profile, tokens) {
+              // Default to Discord global name or username
+              let displayName = profile.global_name || profile.username;
+
+              // If guild ID is configured, try to fetch the member's nickname
+              if (DISCORD_GUILD_ID && tokens.access_token) {
+                try {
+                  const memberRes = await fetch(
+                    `https://discord.com/api/v10/users/@me/guilds/${DISCORD_GUILD_ID}/member`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${tokens.access_token}`,
+                      },
+                    }
+                  );
+                  if (memberRes.ok) {
+                    const member = await memberRes.json();
+                    // Use nickname if available, otherwise keep global name
+                    if (member.nick) {
+                      displayName = member.nick;
+                    }
+                  }
+                } catch {
+                  // Fall back to global name if API fails
+                }
+              }
+
+              return {
+                id: profile.id,
+                name: displayName,
+                email: null, // No email collected
+                image: profile.avatar
+                  ? `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`
+                  : `https://cdn.discordapp.com/embed/avatars/${(parseInt(profile.id) >> 22) % 6}.png`,
+                username: displayName,
+                discordId: profile.id,
+              };
+            },
           }),
         ]
       : []),

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import FadeIn from "@/components/FadeIn";
 
 const cards = [
   {
@@ -20,7 +21,7 @@ const cards = [
     title: "LOCATION DRIFT",
     description: "Pas de caisse préparée ? Aucun problème. Loue l'un de nos monstres réglés sur mesure pour avaler les virages en crabe.",
     link: "VOIR LA FLOTTE",
-    href: "/bientot-disponible",
+    href: "/location",
     image: "/location-drift.png",
     color: "secondary",
   },
@@ -85,31 +86,32 @@ export default function Vibe() {
         </motion.div>
 
         {/* Cards Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {cards.map((card) => {
-          const colorClasses = {
-            primary: "text-primary border-primary/10 hover:border-primary/50",
-            secondary: "text-secondary border-secondary/10 hover:border-secondary/50",
-            tertiary: "text-tertiary border-tertiary/10 hover:border-tertiary/50",
-          };
-          const numberBgColors = {
-            primary: "bg-primary",
-            secondary: "bg-secondary",
-            tertiary: "bg-tertiary",
-          };
+          const borderClass = card.color === "primary"
+            ? "border-primary/10 hover:border-primary/50"
+            : card.color === "secondary"
+            ? "border-secondary/10 hover:border-secondary/50"
+            : "border-tertiary/10 hover:border-tertiary/50";
+
+          const badgeBgClass = card.color === "primary"
+            ? "bg-primary"
+            : card.color === "secondary"
+            ? "bg-secondary"
+            : "bg-tertiary";
+
+          const linkTextClass = card.color === "primary"
+            ? "text-primary"
+            : card.color === "secondary"
+            ? "text-secondary"
+            : "text-tertiary";
 
           return (
-            <Link href={card.href} key={card.title} className="block h-full">
-              <motion.div
-                variants={itemVariants}
-                className={`group relative overflow-hidden bg-surface-container border transition-all duration-500 cursor-pointer h-full flex flex-col ${colorClasses[card.color as keyof typeof colorClasses]}`}
-              >
+            <FadeIn key={card.title} delay={cards.indexOf(card) * 0.15}>
+              <Link href={card.href} className="block h-full">
+                <div
+                  className={`group relative overflow-hidden bg-surface-container border transition-all duration-500 cursor-pointer h-full flex flex-col ${borderClass}`}
+                >
                 {/* Image Container */}
                 <div className="h-80 overflow-hidden relative shrink-0">
                   <Image
@@ -125,7 +127,7 @@ export default function Vibe() {
                 {/* Content */}
                 <div className="p-8 relative flex flex-col flex-grow">
                   {/* Number Badge */}
-                  <div className={`absolute -top-12 right-8 ${numberBgColors[card.color as keyof typeof numberBgColors]} w-12 h-12 flex items-center justify-center font-[family-name:var(--font-space-grotesk)] font-black italic text-black`}>
+                  <div className={`absolute -top-12 right-8 ${badgeBgClass} w-12 h-12 flex items-center justify-center font-[family-name:var(--font-space-grotesk)] font-black italic text-black`}>
                     {card.number}
                   </div>
 
@@ -140,16 +142,17 @@ export default function Vibe() {
                   </p>
 
                   {/* Link Button */}
-                  <span className={`flex items-center gap-2 font-[family-name:var(--font-space-grotesk)] font-bold text-xs tracking-widest group-hover:gap-4 transition-all mt-auto ${card.color === "primary" ? "text-primary" : card.color === "secondary" ? "text-secondary" : "text-tertiary"}`}>
+                  <span className={`flex items-center gap-2 font-[family-name:var(--font-space-grotesk)] font-bold text-xs tracking-widest group-hover:gap-4 transition-all mt-auto ${linkTextClass}`}>
                     {card.link}
                     <ArrowRight size={16} />
                   </span>
                 </div>
-              </motion.div>
-            </Link>
+                </div>
+              </Link>
+            </FadeIn>
           );
         })}
-      </motion.div>
+        </div>
     </div>
   </section>
   );

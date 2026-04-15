@@ -68,6 +68,17 @@ export default function AdminClient({ photos: initialPhotos, users: initialUsers
     setUsers((prev) => prev.map((u) => u.id === userId ? { ...u, role: newRole } : u));
   };
 
+  const deleteUser = async (userId: string, userName: string) => {
+    if (!confirm(`Supprimer définitivement le compte de "${userName}" ?`)) return;
+    const res = await fetch(`/api/admin/users/${userId}`, { method: "DELETE" });
+    if (res.ok) {
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+    } else {
+      const data = await res.json();
+      alert(data.error || "Erreur lors de la suppression");
+    }
+  };
+
   const createEvent = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch("/api/admin/events", {
@@ -218,6 +229,15 @@ export default function AdminClient({ photos: initialPhotos, users: initialUsers
                   >
                     {user.role === "admin" ? "Rétrograder" : "Promouvoir admin"}
                   </button>
+                  {user.role !== "admin" && (
+                    <button
+                      onClick={() => deleteUser(user.id, user.name ?? "Sans nom")}
+                      className="text-red-400 hover:text-red-300 transition-colors"
+                      title="Supprimer le compte"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

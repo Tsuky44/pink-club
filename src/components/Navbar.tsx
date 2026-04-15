@@ -16,8 +16,8 @@ const tiltNeon = Tilt_Neon({
 const navLinks = [
   { name: "HOME", href: "/" },
   { name: "WALL OF FAME", href: "/wall-of-fame" },
-  { name: "LOCATION DRIFT", href: "/bientot-disponible" },
-  { name: "CONTACT", href: "/bientot-disponible" },
+  { name: "LOCATION DRIFT", href: "/location" },
+  { name: "CONTACT", href: "/contact" },
 ];
 
 export default function Navbar() {

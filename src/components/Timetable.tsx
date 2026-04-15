@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import FadeIn from "@/components/FadeIn";
 
 const scheduleItems = [
   {
@@ -74,26 +75,26 @@ export default function Timetable() {
       </motion.div>
 
       {/* Schedule */}
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="grid grid-cols-1 gap-1"
-      >
+      <div className="grid grid-cols-1 gap-1">
         {scheduleItems.map((item, index) => {
           const bgClass = index % 2 === 1 ? "bg-surface-container-high" : "bg-surface-container";
-          const statusColors = {
+          const borderColors: Record<string, string> = {
+            primary: "hover:border-primary",
+            secondary: "hover:border-secondary",
+            tertiary: "hover:border-tertiary",
+            outline: "hover:border-outline",
+          };
+          const statusColors: Record<string, string> = {
             primary: "text-primary",
             secondary: "text-secondary",
             tertiary: "text-tertiary",
+            outline: "text-outline",
           };
 
           return (
-            <motion.div
-              key={item.days}
-              variants={itemVariants}
-              className={`grid grid-cols-1 md:grid-cols-4 items-center ${bgClass} p-6 md:p-8 border-l-2 border-outline/20 hover:border-${item.statusColor} transition-all group cursor-pointer`}
+            <FadeIn key={index} delay={index * 0.08} direction="left">
+            <div
+              className={`grid grid-cols-1 md:grid-cols-4 items-center ${bgClass} p-6 md:p-8 border-l-2 border-outline/20 ${borderColors[item.statusColor] || "hover:border-outline"} transition-all group cursor-pointer`}
             >
               <div
                 className={`text-2xl md:text-3xl font-[family-name:var(--font-space-grotesk)] font-black tracking-tighter uppercase ${
@@ -111,15 +112,16 @@ export default function Timetable() {
               </div>
               <div
                 className={`text-right font-[family-name:var(--font-space-grotesk)] font-bold text-xs tracking-widest italic ${
-                  statusColors[item.statusColor as keyof typeof statusColors]
+                  statusColors[item.statusColor] || "text-on-surface-variant"
                 } ${item.glow ? "neon-text-glow" : ""}`}
               >
                 {item.status}
               </div>
-            </motion.div>
+            </div>
+            </FadeIn>
           );
         })}
-      </motion.div>
+      </div>
     </section>
   );
 }

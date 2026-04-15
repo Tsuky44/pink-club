@@ -7,7 +7,7 @@ import { MessageCircle, AtSign } from "lucide-react";
 const footerLinks = [
   { name: "PARTENAIRES", href: "#" },
   { name: "CONDITIONS", href: "#" },
-  { name: "CONTACT", href: "#" },
+  { name: "CONTACT", href: "/contact" },
 ];
 
 const socialLinks = [

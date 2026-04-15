@@ -5,6 +5,7 @@ import { Tilt_Neon } from "next/font/google";
 import { GalleryGrid } from "@/components/wall-of-fame/GalleryGrid";
 import { UploadButton } from "@/components/wall-of-fame/UploadButton";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import Image from "next/image";
 
 const tiltNeon = Tilt_Neon({
@@ -120,14 +121,7 @@ export function WallOfFameClient({ initialPhotos }: WallOfFameClientProps) {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-black border-t border-surface py-8">
-        <div className="max-w-screen-2xl mx-auto px-6 text-center">
-          <p className="text-on-surface-variant text-xs tracking-widest uppercase">
-            THE PINK CLUB © 2026 • LOS SANTOS
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </main>
     </>
   );
