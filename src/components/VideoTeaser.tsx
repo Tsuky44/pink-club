@@ -6,10 +6,15 @@ import { useState, useEffect } from "react";
 import TeaserVideo from "./TeaserVideo";
 import { GTAMapModal } from "./GTAMapModal";
 
-export default function VideoTeaser() {
-  const [rsvpCount, setRsvpCount] = useState(0);
+interface VideoTeaserProps {
+  initialCount?: number;
+  initialEventId?: string | null;
+}
+
+export default function VideoTeaser({ initialCount = 0, initialEventId = null }: VideoTeaserProps) {
+  const [rsvpCount, setRsvpCount] = useState(initialCount);
   const [hasClicked, setHasClicked] = useState(false);
-  const [eventId, setEventId] = useState<string | null>(null);
+  const [eventId, setEventId] = useState<string | null>(initialEventId);
   const [isMapOpen, setIsMapOpen] = useState(false);
 
   const fetchRsvp = async () => {

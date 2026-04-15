@@ -3,11 +3,20 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 
 async function getOrCreateActiveEvent() {
+  // Priorité : event actif → event le plus récent → créer
   let event = await prisma.event.findFirst({
     where: { isActive: true },
     orderBy: { createdAt: "desc" },
     include: { _count: { select: { rsvps: true } } },
   });
+
+  if (!event) {
+    // Pas d'event actif : prendre le plus récent plutôt qu'en créer un nouveau
+    event = await prisma.event.findFirst({
+      orderBy: { createdAt: "desc" },
+      include: { _count: { select: { rsvps: true } } },
+    });
+  }
 
   if (!event) {
     const created = await prisma.event.create({
