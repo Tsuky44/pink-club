@@ -1,7 +1,7 @@
 "use client";
 
 import { Tilt_Neon } from "next/font/google";
-import { Car } from "lucide-react";
+import Image from "next/image";
 import FadeIn from "@/components/FadeIn";
 
 const tiltNeon = Tilt_Neon({
@@ -20,12 +20,12 @@ const neonStyle = {
 };
 
 const cars = [
-  { name: "TAMPA DRIFT BLANCHE", price: "1 000$ 5min", borderClass: "border-secondary", gradientClass: "from-secondary/20", iconClass: "text-secondary/30", textClass: "text-secondary" },
-  { name: "TAMPA DRIFT ROUGE",    price: "1 000$ 5min", borderClass: "border-primary",   gradientClass: "from-primary/20",   iconClass: "text-primary/30",   textClass: "text-primary" },
-  { name: "FUTO DRIFT VIOLET",   price: "500$ 5min", borderClass: "border-tertiary",  gradientClass: "from-tertiary/20",  iconClass: "text-tertiary/30",  textClass: "text-tertiary" },
-  { name: "FUTO DRIFT ROSE",    price: "500$ 5min", borderClass: "border-secondary", gradientClass: "from-secondary/20", iconClass: "text-secondary/30", textClass: "text-secondary" },
-  { name: "FUTO DRIFT ORANGE",      price: "500$ 5min", borderClass: "border-tertiary",  gradientClass: "from-tertiary/20",  iconClass: "text-tertiary/30",  textClass: "text-tertiary" },
-  { name: "FUTO DRIFT JAUNE", price: "500$ 5min", borderClass: "border-primary",   gradientClass: "from-primary/20",   iconClass: "text-primary/30",   textClass: "text-primary" },
+  { name: "TAMPA DRIFT BLANCHE", price: "1 000$ 5min", image: "/flotte/tempa-blanche.png", borderClass: "border-secondary", gradientClass: "from-secondary/20", iconClass: "text-secondary/30", textClass: "text-secondary" },
+  { name: "TAMPA DRIFT ROUGE",    price: "1 000$ 5min", image: "/flotte/rouge.png", borderClass: "border-primary",   gradientClass: "from-primary/20",   iconClass: "text-primary/30",   textClass: "text-primary" },
+  { name: "FUTO DRIFT VIOLET",   price: "500$ 5min", image: "/flotte/violet.png", borderClass: "border-tertiary",  gradientClass: "from-tertiary/20",  iconClass: "text-tertiary/30",  textClass: "text-tertiary" },
+  { name: "FUTO DRIFT ROSE",    price: "500$ 5min", image: "/flotte/rose.png", borderClass: "border-secondary", gradientClass: "from-secondary/20", iconClass: "text-secondary/30", textClass: "text-secondary" },
+  { name: "FUTO DRIFT ORANGE",      price: "500$ 5min", image: "/flotte/orange.png", borderClass: "border-tertiary",  gradientClass: "from-tertiary/20",  iconClass: "text-tertiary/30",  textClass: "text-tertiary" },
+  { name: "FUTO DRIFT JAUNE", price: "500$ 5min", image: "/flotte/jaune.png", borderClass: "border-primary",   gradientClass: "from-primary/20",   iconClass: "text-primary/30",   textClass: "text-primary" },
 ];
 
 export default function LocationFleet() {
@@ -53,8 +53,14 @@ export default function LocationFleet() {
               <div className={`group bg-surface flex flex-col border-b-4 ${car.borderClass} shadow-[0_0_15px_rgba(0,0,0,0.3)] hover:shadow-[0_0_25px_rgba(0,238,252,0.15)] transition-all duration-300`}>
                 <div className="h-48 bg-surface-container-high relative overflow-hidden">
                   <div className={`absolute inset-0 bg-gradient-to-br ${car.gradientClass} to-surface-container-high`} />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Car className={`w-20 h-20 ${car.iconClass}`} />
+                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                    <Image
+                      src={car.image}
+                      alt={car.name}
+                      width={200}
+                      height={120}
+                      className="object-contain drop-shadow-lg"
+                    />
                   </div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
